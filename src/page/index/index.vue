@@ -408,7 +408,7 @@ const aiBoxScroll = () => {
         scrollbarAi.scrollTop = scrollbarAi.scrollHeight
     })
 }
-let html = marked("## demo \n ```php \n <? \n echo '123'; \n ``` \n <font color='#10A37F'>[[End]]</font>")
+let html = marked("## demo \n ```php \n <? \n echo '123'; \n ``` \n <font color=#10A37F >[[End]]</font>")
 console.log(html);
 
 data.contextArray.push({
