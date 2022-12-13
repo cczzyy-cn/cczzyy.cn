@@ -6,6 +6,8 @@ import { IEditorConfig } from '@wangeditor/editor'
 import { Editor } from '@wangeditor/editor-for-vue'
 import '@wangeditor/editor/dist/css/style.css'
 import { AppType } from "/@/type/AppType"
+import { marked } from 'marked';
+import hljs from 'highlight.js'
 
 const app = inject('app') as AppType
 const router = useRouter();
@@ -50,7 +52,8 @@ interface Article {
 // OpenAI 会话内容类型
 interface Context {
     type: string,
-    text: string,
+    text?: string,
+    html?: string,
     codeType?: string,
     isError?: boolean,
 }
@@ -97,8 +100,12 @@ const data = reactive<{
     sessionId: 'czy',
     contextArray: [
         {
-            type: 'ai',
+            type: 'ai', //```java public class HelloWorld { public static void main(String[] args) { System.out.println("你好！"); } } [[End]]
             text: '请在底部输入框给AI提问或提示。',
+        },
+        {
+            type: 'ai', //
+            html: '```java public class HelloWorld { public static void main(String[] args) { System.out.println("你好！"); } } [[End]]```',
         },
         {
             type: 'ai-code',
@@ -273,15 +280,23 @@ const GoPublish = async (name: string, query: LocationQueryRaw | undefined) => {
         Go(name, query);
     }
 }
-let regex = /```(\w+)\s+(.+?)```/gm;
-let matches = regex.exec("```java System.out.println('你好！'); ```dfdf```java System.out.println('你好啊啊！'); ```") as any;
-console.log(matches);
-// let languageName = matches[1];
-// let codeContent = matches[2];
-// console.log(languageName, codeContent);
 
 // OpenAI
 data.sessionId = new Date().getTime() + `-` + Math.floor(Math.random() * 1000 + 2000);;
+const render = new marked.Renderer();
+marked.setOptions({
+    renderer: render, // 这是必填项
+    highlight: function (code) {
+        return hljs.highlightAuto(code).value;
+    },
+    gfm: true, //默认为true。 允许 Git Hub标准的markdown.
+    breaks: true, //默认为false。 允许回车换行。该选项要求 gfm 为true。
+    pedantic: false, //默认为false。 尽可能地兼容 markdown.pl的晦涩部分。不纠正原始模型任何的不良行为和错误。
+    sanitize: true, //对输出进行过滤（清理）
+    smartLists: true,
+    smartypants: true, //使用更为时髦的标点，比如在引用语法中加入破折号。
+    langPrefix: "hljs language-",
+})
 const completions = () => {
     if (data.loadingAi == true) return;
     data.contextArray.push({
@@ -364,14 +379,15 @@ const postAi = async () => {
     data.loadingAi = false
     if (res.code == 200) {
         let text = res.data['choices'][0]['text']
-        let bool = handleCodeText(text)
-        if (bool) {
-            return
-        }
-        text = handleStr(text)
+        // let bool = handleCodeText(text)
+        // if (bool) {
+        //     return
+        // }
+        // text = handleStr(text)
+        let html = marked(text)
         data.contextArray.push({
             type: 'ai',
-            text: text,
+            html: html,
         })
         aiBoxScroll()
         return
@@ -392,6 +408,13 @@ const aiBoxScroll = () => {
         scrollbarAi.scrollTop = scrollbarAi.scrollHeight
     })
 }
+let html = marked("## demo \n ```php \n <? \n echo '123'; \n ``` \n <font color='#10A37F'>[[End]]</font>")
+console.log(html);
+
+data.contextArray.push({
+    type: 'ai',
+    html: html,
+})
 </script>
     
 <template>
@@ -415,10 +438,11 @@ const aiBoxScroll = () => {
                                         </div>
                                     </div>
                                     <div class="item-right">
-                                        <span style="white-space: pre-wrap;"
+                                        <div v-html="item.html"></div>
+                                        <!-- <span style="white-space: pre-wrap;"
                                             :style="item.isError ? { color: 'firebrick' } : {}">{{
                                                     item.isError ? `[${item.text}]` : item.text
-                                            }}</span>
+                                            }}</span> -->
                                     </div>
                                 </div>
                                 <!-- OpenAI Code -->
