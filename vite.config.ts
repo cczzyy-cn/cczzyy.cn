@@ -17,7 +17,7 @@ export default defineConfig({
       },
       '/OpenAI': {
         // 项目内请求 /api => https://www.cczzyy.cn
-        target: "http://localhost:9501",
+        target: "https://cczzyy.cn",
         changeOrigin: true, // 允许跨越
         // 替换 '/api' 为 '' 
         //rewrite: (path) => path.replace(/^\/api/, '')

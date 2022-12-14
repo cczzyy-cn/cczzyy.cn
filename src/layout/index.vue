@@ -229,17 +229,6 @@ const email = `© Developed by < cczzyy.cn@gmail.com >`;
 </template>
     
 <style>
-pre{
-    width: 100%;
-}
-.hljs {
-    width: 100%;
-    font-size: 0.95rem;
-    background-color: #000000 !important;
-    border-radius: 0.375rem;
-    font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace';
-}
-
 .f {
     display: flex;
 }
