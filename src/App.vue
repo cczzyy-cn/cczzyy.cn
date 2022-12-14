@@ -17,6 +17,7 @@ import Layout from "/@/layout/index.vue";
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace';
 }
 
 #app {

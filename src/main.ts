@@ -5,9 +5,13 @@ import router from '/@/router/index'
 import 'highlight.js/styles/base16/railscasts.css'
 import 'highlight.js/lib/common'
 import hljsVuePlugin from '@highlightjs/vue-plugin'
+// 打字动效组件
+import VueTypedJs from 'vue-typed-js'
+
 
 const app = createApp(App)
 app.use(router)
 //注册组件
 app.use(hljsVuePlugin)
+app.use(VueTypedJs)
 app.mount('#app')

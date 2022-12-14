@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { reactive, inject, h, watch, nextTick } from 'vue'
+import { reactive, inject, h, watch, nextTick, CSSProperties } from 'vue'
 import { LocationQueryRaw, useRouter, useRoute } from 'vue-router'
-import { NCard, NTag, NInputGroup, NInput, NSpace, NButton, NSelect, NCollapseTransition, NSpin, SelectRenderTag, NDrawer, NDrawerContent, NScrollbar } from 'naive-ui'
+import { NCard, NTag, NInputGroup, NInput, NSpace, NButton, NSwitch, NSelect, NCollapseTransition, NSpin, SelectRenderTag, NDrawer, NDrawerContent, NScrollbar } from 'naive-ui'
 import { IEditorConfig } from '@wangeditor/editor'
 import { Editor } from '@wangeditor/editor-for-vue'
 import '@wangeditor/editor/dist/css/style.css'
 import { AppType } from "/@/type/AppType"
 import { marked } from 'marked';
 import hljs from 'highlight.js'
+
 
 const app = inject('app') as AppType
 const router = useRouter();
@@ -55,6 +56,9 @@ interface Context {
     text?: string,
     html?: string,
     isError?: boolean,
+    completion_tokens?: number,
+    prompt_tokens?: number,
+    total_tokens?: number,
 }
 const data = reactive<{
     ArticleArray: Article[],
@@ -80,8 +84,9 @@ const data = reactive<{
     openAiShow: boolean,
     sessionId: string,
     contextArray: Context[],
-    valueAi: string,
+    prompt: string,
     loadingAi: boolean,
+    modeAi: boolean,
 }>({
     ArticleArray: [],
     TagArray: [],
@@ -95,16 +100,22 @@ const data = reactive<{
         total: 0,
         last_page: 1,
     },
-    openAiShow: false,
-    sessionId: 'czy',
+    openAiShow: false, // 是否显示ai抽屉
+    sessionId: '', // 会话id
+    // 会话上下文
     contextArray: [
         {
             type: 'ai',
             text: '请在底部输入框给AI提问或提示。',
         },
+        {
+            type: 'ai',
+            text: `[问答模式]: 不保存上下文, AI不知道之前的提示或提问。\n[会话模式]: 保存上下文，但会消耗大量提示令牌(prompt_tokens), 到达最大值4000会请求失败且SessionId失效, 需等待24小时重置或刷新页面生成新Id。`,
+        },
     ],
-    valueAi: "",
-    loadingAi: false,
+    prompt: "", // 给ai的提问或提示
+    loadingAi: false, // ai加载中
+    modeAi: true, // true:问答模式，false:会话模式，会话模式会保存上下文，但会消耗大量token
 })
 
 const SearchData = reactive({
@@ -297,24 +308,31 @@ const completions = () => {
     if (data.loadingAi == true) return;
     data.contextArray.push({
         'type': 'user',
-        'text': data.valueAi,
+        'text': data.prompt,
     })
     postAi()
-    data.valueAi = '';
+    data.prompt = '';
     aiBoxScroll()
 }
 
 // 发送请求
 const postAi = async () => {
+    console.log(data.modeAi);
+    let sessionId = data.sessionId
+    // 问答模式不带会话id
+    if (data.modeAi) {
+        sessionId = ''
+    }
     data.loadingAi = true
     let res = await app.postAi(app.api.completionsAi, {
-        sessionId: data.sessionId,
-        prompt: data.valueAi,
+        sessionId: sessionId,
+        prompt: data.prompt,
     });
     data.loadingAi = false
     if (res.code == 200) {
         let text = res.data['choices'][0]['text']
-        let html = marked(text)
+        let usage = res.data['usage'] as Context
+        let html = marked(text + ` [prompt_tokens:${usage.prompt_tokens}] [completion_tokens:${usage.completion_tokens}]`)
         data.contextArray.push({
             type: 'ai',
             html: html,
@@ -322,7 +340,6 @@ const postAi = async () => {
         aiBoxScroll()
         return
     }
-    console.log(res);
     data.contextArray.push({
         isError: true,
         type: 'ai',
@@ -345,12 +362,36 @@ const aiBoxScroll = () => {
         scrollbarAi.scrollTop = scrollbarAi.scrollHeight
     })
 }
+
+// AI模式切换
+
+const railStyle = ({
+    focused,
+    checked
+}: {
+    focused: boolean
+    checked: boolean
+}) => {
+    const style: CSSProperties = {}
+    if (checked) {
+        style.background = '#18a058'
+        if (focused) {
+            style.boxShadow = '0 0 0 2px #d0305040'
+        }
+    } else {
+        style.background = '#2080f0'
+        if (focused) {
+            style.boxShadow = '0 0 0 2px #2080f040'
+        }
+    }
+    return style
+}
 </script>
     
 <template>
     <div id="index">
         <NDrawer v-model:show="data.openAiShow" :height="'100%'" :placement="'top'">
-            <n-drawer-content :title="`OpenAI API [ID:${data.sessionId}] (Esc 收起)`"
+            <n-drawer-content :title="`OpenAI GPT-3  (Esc 收起)`"
                 :body-content-style="{ 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' }"
                 closable>
                 <div class="openAi-box">
@@ -382,7 +423,7 @@ const aiBoxScroll = () => {
                                 <!-- 用户提问 -->
                                 <div class="openAi-item" v-if="item.type == 'user'">
                                     <div class="item-left">
-                                        <div class="openAi-img" style="background-color:slateblue;">
+                                        <div class="openAi-img" style="background-color:slateblue;font-size: 1.2rem;">
                                             <p>U</p>
                                         </div>
                                     </div>
@@ -397,13 +438,31 @@ const aiBoxScroll = () => {
                     <div class="openAi-box-bottom">
                         <n-spin :show="data.loadingAi" style="width: 100%;">
                             <n-input-group>
-                                <n-input v-model:value="data.valueAi" @keyup="openAiKeyup"
+                                <n-input v-model:value="data.prompt" @keyup="openAiKeyup"
                                     placeholder="请输入你的提问或提示 (Enter)" :style="{ width: '100%' }" />
                                 <n-button @click="completions" type="primary" :style="{ width: '100px' }">
                                     Completions
                                 </n-button>
                             </n-input-group>
                         </n-spin>
+                        <n-space style="margin-top: 5px;">
+                            <n-switch v-model:value="data.modeAi" :rail-style="railStyle" :round="false">
+                                <template #checked>
+                                    问答模式
+                                </template>
+                                <template #unchecked>
+                                    会话模式
+                                </template>
+                            </n-switch>
+                            <n-input-group style="padding-top: 1.5px;">
+                                <n-button type="primary" size="tiny">
+                                    SessionId
+                                </n-button>
+                                <n-input v-model:value="data.sessionId" style="width: 105px" size="tiny"
+                                    placeholder="SessionId" />
+                            </n-input-group>
+                        </n-space>
+
 
                     </div>
                 </div>
@@ -514,20 +573,21 @@ const aiBoxScroll = () => {
     box-shadow: 2px 2px 8px rgba(20, 20, 20, 0.4);
 }
 
-.openAi-box-top {
-    background-color: aquamarine;
+:deep() #scrollbarAi {
+    border-bottom: 0.5px solid rgba(57, 54, 54, 0.2);
 }
 
 .openAi-box-content {
     flex: 1;
     height: 0;
     padding: 10px;
-
+    padding-top: 0px;
 }
 
 .openAi-item {
     display: flex;
-    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .item-left {
@@ -537,7 +597,13 @@ const aiBoxScroll = () => {
 .item-right {
     flex: 1;
     width: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.9rem;
+    font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace';
+}
+
+:deep() .item-right pre {
+    line-height: 1.2rem;
 }
 
 :deep() .hljs {
@@ -560,8 +626,8 @@ const aiBoxScroll = () => {
 }
 
 .openAi-img {
-    width: 30px;
-    height: 30px;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -572,6 +638,7 @@ const aiBoxScroll = () => {
 
 .openAi-box-bottom {
     display: flex;
+    flex-direction: column;
     padding: 10px;
     padding-top: 0px;
 }
