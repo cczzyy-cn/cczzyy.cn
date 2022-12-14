@@ -505,7 +505,7 @@ const aiBoxScroll = () => {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    box-shadow: 2px 2px 6px rgba(20, 20, 20, 0.3);
+    box-shadow: 2px 2px 8px rgba(20, 20, 20, 0.3);
     border-radius: 0.3rem;
     max-width: 1000px;
 }
