@@ -364,7 +364,6 @@ const aiBoxScroll = () => {
 }
 
 // AI模式切换
-
 const railStyle = ({
     focused,
     checked
@@ -462,8 +461,6 @@ const railStyle = ({
                                     placeholder="SessionId" />
                             </n-input-group>
                         </n-space>
-
-
                     </div>
                 </div>
             </n-drawer-content>
