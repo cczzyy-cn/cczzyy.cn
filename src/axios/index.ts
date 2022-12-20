@@ -13,17 +13,21 @@ const CreatePost = (URL: string, handleConfig: handleConfig, handleRes: handleRe
         timeout: timeout,
     });
 
-    // 请求拦截器
-    Axios.interceptors.request.use((config) => {
-        config = handleConfig(config)
-        return config;
-    }, function (error) {
+    let axiosError = (error: any) => {
         handleError(error)
         let res = {
             code: 400,
             msg: error.message
         }
         return Promise.resolve(res);
+    }
+
+    // 请求拦截器
+    Axios.interceptors.request.use((config) => {
+        config = handleConfig(config)
+        return config;
+    }, function (error) {
+        return axiosError(error);
     });
 
     // 响应拦截器
@@ -32,12 +36,7 @@ const CreatePost = (URL: string, handleConfig: handleConfig, handleRes: handleRe
         res = handleRes(res)
         return res;
     }, async function (error) {
-        handleError(error)
-        let res = {
-            code: 400,
-            msg: error.message
-        }
-        return Promise.resolve(res);
+        return axiosError(error);
     });
 
     let post = (url: string, data: object) => {
