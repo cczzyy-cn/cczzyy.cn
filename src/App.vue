@@ -4,6 +4,8 @@
 import { NMessageProvider } from 'naive-ui'
 import Layout from "/@/layout/index.vue";
 
+document.body.style.fontSize = '12px'
+
 </script>
   
 <template>

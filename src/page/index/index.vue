@@ -554,10 +554,9 @@ const railStyle = ({
                                     <div class="item-right" v-if="item.html" v-html="item.html">
                                     </div>
                                     <div class="item-right" v-if="item.text">
-                                        <span style="white-space: pre-wrap;"
-                                            :style="item.isError ? { color: 'firebrick' } : {}">{{
-                                                    item.isError ? `[ ${item.text} ]` : item.text
-                                            }}</span>
+                                        <span :style="item.isError ? { color: 'firebrick' } : {}">{{
+                                                item.isError ? `[ ${item.text} ]` : item.text
+                                        }}</span>
                                     </div>
                                 </div>
                                 <!-- OpenAI-Img -->
@@ -665,23 +664,20 @@ const railStyle = ({
                                                         </div>
                                                         <div class="item-right" v-if="item.html">
                                                             <div v-html="item.html"></div>
-                                                            <p>
-                                                                [{{ item.dateTime }}]
+                                                            <span>[{{ item.dateTime }}]
                                                                 <n-button @click="delHistoryContext(index)" type='error'
                                                                     size='tiny'>删除</n-button>
-                                                            </p>
+                                                            </span>
                                                         </div>
                                                         <div class="item-right" v-if="item.text">
-                                                            <span style="white-space: pre-wrap;"
-                                                                :style="item.isError ? { color: 'firebrick' } : {}">{{
-                                                                        item.isError ? `[${item.text} ]` : item.text
-                                                                }}</span>
-                                                            <br>
-                                                            <p>
-                                                                [{{ item.dateTime }}]
+                                                            <span :style="item.isError ? { color: 'firebrick' } : {}">{{
+                                                                    item.isError ? `[ ${item.text} ]` : item.text
+                                                            }}</span>
+                                                            <br />
+                                                            <span>[{{ item.dateTime }}]
                                                                 <n-button @click="delHistoryContext(index)" type='error'
                                                                     size='tiny'>删除</n-button>
-                                                            </p>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <!-- OpenAI-Img -->
@@ -699,11 +695,10 @@ const railStyle = ({
                                                         </div>
                                                         <div class="item-right">
                                                             <img :src="item.imgUrl" style="width: 100%;" />
-                                                            <p>
-                                                                [{{ item.dateTime }}]
+                                                            <span>[{{ item.dateTime }}]
                                                                 <n-button @click="delHistoryContext(index)" type='error'
                                                                     size='tiny'>删除</n-button>
-                                                            </p>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <!-- 用户提问 -->
@@ -718,13 +713,12 @@ const railStyle = ({
                                                             <span style="white-space: pre-wrap;">{{ item.text
                                                             }}</span>
                                                             <br>
-                                                            <p>
-                                                                [{{ item.dateTime }}]
+                                                            <span>[{{ item.dateTime }}]
                                                                 <n-button @click="delHistoryContext(index)" type="error"
                                                                     size="tiny">
                                                                     删除
                                                                 </n-button>
-                                                            </p>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -911,6 +905,16 @@ const railStyle = ({
     font-size: 1rem;
     line-height: 1.9rem;
     font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace';
+}
+
+.item-right span {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+:deep() .item-right pre code {
+    display: block;
+    overflow-x: auto;
 }
 
 .item-right img {

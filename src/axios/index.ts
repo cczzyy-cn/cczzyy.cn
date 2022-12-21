@@ -6,7 +6,7 @@ type handleConfig = (config: AxiosRequestConfig<any>) => AxiosRequestConfig<any>
 type handleRes = (res: any) => { code: number, msg: string }
 type handleError = (error: { message: string }) => void
 
-const CreatePost = (URL: string, handleConfig: handleConfig, handleRes: handleRes, handleError: handleError, timeout = 30000) => {
+const CreatePost = (URL: string, handleConfig: handleConfig, handleRes: handleRes, handleError: handleError, timeout = 60000) => {
     // 创建 axios 实例
     let Axios = axios.create({
         baseURL: URL,
