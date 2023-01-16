@@ -314,7 +314,6 @@ marked.setOptions({
     gfm: true, //默认为true。 允许 GitHub 标准的 markdown.
     breaks: true, //默认为false。 允许回车换行。该选项要求 gfm 为true。
     pedantic: false, //默认为false。 尽可能地兼容 markdown.pl的晦涩部分。不纠正原始模型任何的不良行为和错误。
-    sanitize: true, //对输出进行过滤（清理）
     smartLists: true,
     smartypants: true, //使用更为时髦的标点，比如在引用语法中加入破折号。
     langPrefix: "hljs language-", // highlight.js 配置
@@ -339,7 +338,6 @@ const completions = () => {
 
 // 发送请求
 const postAi = async () => {
-    console.log(data.modeAi);
     let sessionId = data.sessionId
     // 问答模式不带会话id
     if (data.modeAi) {
