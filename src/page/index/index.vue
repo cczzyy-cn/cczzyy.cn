@@ -526,7 +526,7 @@ const railStyle = ({
     return style
 }
 </script>
-    
+
 <template>
     <div id="index">
         <!-- AI抽屉 -->
@@ -555,7 +555,7 @@ const railStyle = ({
                                     </div>
                                     <div class="item-right" v-if="item.text">
                                         <span :style="item.isError ? { color: 'firebrick' } : {}">{{
-                                                item.isError ? `[ ${item.text} ]` : item.text
+                                            item.isError ? `[ ${item.text} ]` : item.text
                                         }}</span>
                                     </div>
                                 </div>
@@ -671,7 +671,7 @@ const railStyle = ({
                                                         </div>
                                                         <div class="item-right" v-if="item.text">
                                                             <span :style="item.isError ? { color: 'firebrick' } : {}">{{
-                                                                    item.isError ? `[ ${item.text} ]` : item.text
+                                                                item.isError ? `[ ${item.text} ]` : item.text
                                                             }}</span>
                                                             <br />
                                                             <span>[{{ item.dateTime }}]
@@ -710,7 +710,8 @@ const railStyle = ({
                                                             </div>
                                                         </div>
                                                         <div class="item-right">
-                                                            <span style="white-space: pre-wrap;">{{ item.text
+                                                            <span style="white-space: pre-wrap;">{{
+                                                                item.text
                                                             }}</span>
                                                             <br>
                                                             <span>[{{ item.dateTime }}]
@@ -819,7 +820,7 @@ const railStyle = ({
                                 <div class="tag_box">
                                     <div v-for="(item2, index2) in item.GlArticleTag "
                                         style="margin-right: 10px;margin-bottom: 5px;">
-                                        <router-link :to="`/? tag_id = ${item2.tag_id}`">
+                                        <router-link :to="`/?tag_id=${item2.tag_id}`">
                                             <NTag
                                                 :color="{ color: item2.color, textColor: '#FFFFFFFF', borderColor: '#6D9B9FFF' }"
                                                 style="cursor: pointer;">
@@ -855,7 +856,7 @@ const railStyle = ({
 
     </div>
 </template>
-    
+
 <style scoped>
 #index {
     display: flex;
@@ -1060,4 +1061,3 @@ const railStyle = ({
     padding-bottom: 5px;
 }
 </style>
-    
