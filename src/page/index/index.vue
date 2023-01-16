@@ -787,7 +787,7 @@ const railStyle = ({
                 <NInput v-model:value="SearchData.search" @input="postArticle()" clearable type="text" placeholder="搜索"
                     style="width: 240px;" />
                 <div class="select_tag_box">
-                    <NSelect v-model:value="SearchData.tag" @update:value="postArticle" multiple clearable
+                    <NSelect v-model:value="SearchData.tag" @update:value="postArticle" multiple clearable filterable
                         :max-tag-count="5" :render-tag="renderTag" :render-label="renderLabel" :options="data.TagArray"
                         placeholder="标签" />
                 </div>

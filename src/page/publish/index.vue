@@ -198,7 +198,7 @@ const FormData = reactive({
             <NSpace vertical>
                 <NInput v-model:value="FormData.title" size="large" type="text" placeholder="标题" />
                 <div class="select_tag_box">
-                    <NSelect v-model:value="FormData.tag" multiple :render-tag="renderTag" :render-label="renderLabel"
+                    <NSelect v-model:value="FormData.tag" multiple filterable clearable :render-tag="renderTag" :render-label="renderLabel"
                         :options="data.TagArray" placeholder="文章标签" />
                 </div>
                 <div class="add_tag_box">
