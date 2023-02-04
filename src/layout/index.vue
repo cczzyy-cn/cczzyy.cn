@@ -96,9 +96,6 @@ const app = reactive<AppType>({
     postAi: postAi,
     api: api,
     msg: msg,
-    handleSonKey: (obj: any, key: any) => {
-        return obj[key];
-    },
     updateState: (key, value) => {
         app.state[key] = value
     },
