@@ -13,7 +13,7 @@ const routes = [
         path: '/',
         name: "Index",
         meta: {
-            keepAlive: false,
+            keepAlive: true,
             title: "主页",
         },
         component: Index

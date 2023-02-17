@@ -14,12 +14,19 @@ const router = useRouter();
 const route = useRoute()
 
 watch(() => app.state.scroll, (n, o) => {
-    // 快到底部加载文章
-    addArticleData()
+    if (route.name == `Index`) {
+        // 快到底部加载文章
+        addArticleData()
+    }
 })
 
 watch(() => route.query.tag_id, (n, o) => {
-    console.log(n);
+    let scrollTop = localStorage.getItem('Index-scrollTop') ?? `0`
+    // 返回主页时取消请求
+    if (scrollTop != `0`) {
+        return
+    }
+
     let tag_id = n as string
     data.TagArray.forEach((item) => {
         if (tag_id && item.tag_id == tag_id) {

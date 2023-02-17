@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, inject } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { LocationQueryRaw, useRoute, useRouter } from 'vue-router'
 import { NCard, NTag, NButton, NCollapseTransition, NSpin } from 'naive-ui'
 import { IEditorConfig } from '@wangeditor/editor'
 import { Editor } from '@wangeditor/editor-for-vue'
@@ -129,6 +129,14 @@ const updateArticle = async (item: Article, index: number) => {
     }
 }
 
+const Go = (name: string, query: LocationQueryRaw | undefined) => {
+    localStorage.setItem('Index-scrollTop', '0')
+    router.push({
+        name: name,
+        query: query
+    })
+}
+
 </script>
 
 <template>
@@ -153,12 +161,11 @@ const updateArticle = async (item: Article, index: number) => {
                                 <div class="tag_box">
                                     <div v-for="(item2, index2) in item.GlArticleTag "
                                         style="margin-right: 10px;margin-bottom: 5px;">
-                                        <router-link :to="`/?tag_id=${item2.tag_id}`">
-                                            <NTag
-                                                :color="{ color: item2.color, textColor: '#FFFFFFFF', borderColor: '#6D9B9FFF' }"
-                                                style="cursor: pointer;">
-                                                {{ item2.name }}</NTag>
-                                        </router-link>
+                                        <NTag @click="Go('Index', { tag_id: item2.tag_id })"
+                                            :color="{ color: item2.color, textColor: '#FFFFFFFF', borderColor: '#6D9B9FFF' }"
+                                            style="cursor: pointer;">
+                                            {{ item2.name }}
+                                        </NTag>
                                     </div>
                                 </div>
                                 <div class="time_box">
