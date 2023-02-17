@@ -106,6 +106,7 @@ const app = reactive<AppType>({
 
 // 提供给后代组件（相当于 vuex），后代获取： const app = inject('app')
 provide('app', app)
+
 /**
  * 防抖闭包函数
  * @param func 
