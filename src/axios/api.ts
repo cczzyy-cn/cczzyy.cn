@@ -5,6 +5,7 @@ const api: ApiType = {
     LiveUrl: process.env.NODE_ENV === "development" ? 'http://localhost:1936' : 'https://cczzyy.cn/live',
     LiveWs: process.env.NODE_ENV === "development" ? 'ws://localhost:9502/LiveWs' : 'wss://cczzyy.cn/WsLive',
     OpenAI: process.env.NODE_ENV === "development" ? '/OpenAI' : 'https://cczzyy.cn/OpenAI',
+    chatCompletionsAi: "/chatCompletions",
     completionsAi: "/completions",
     imageAi: "/images",
     authRoot: "/blog/authRoot",
