@@ -23,7 +23,7 @@ const reduceCD = (rawCD: number, perCentArr: number[]) => {
     return newCD
 }
 
-reduceCD(34, [20, 20, 30, 25]) // 10.6624 s
+reduceCD(34, [20, 20, 25]) // 10.6624 s
 
 const app = inject('app') as AppType
 const router = useRouter();
