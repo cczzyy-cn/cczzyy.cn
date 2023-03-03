@@ -23,7 +23,7 @@ const reduceCD = (rawCD: number, perCentArr: number[]) => {
     return newCD
 }
 
-reduceCD(34, [20, 20, 25]) // 10.6624 s
+// reduceCD(34, [20, 20, 25]) // 10.6624 s
 
 const app = inject('app') as AppType
 const router = useRouter();
@@ -332,8 +332,13 @@ const render = new marked.Renderer();
 marked.setOptions({
     renderer: render, // 这是必填项
     // 使用 highlight.js 使代码高亮
-    highlight: function (code) {
-        return hljs.highlightAuto(code).value;
+    highlight: function (code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(lang, code).value;
+        } else {
+            return hljs.highlightAuto(code).value;
+        }
+        // return hljs.highlightAuto(code).value;
     },
     gfm: true, //默认为true。 允许 GitHub 标准的 markdown.
     breaks: true, //默认为false。 允许回车换行。该选项要求 gfm 为true。
@@ -341,7 +346,6 @@ marked.setOptions({
     smartLists: true,
     smartypants: true, //使用更为时髦的标点，比如在引用语法中加入破折号。
     //langPrefix: "hljs language-", // highlight.js 配置
-    langPrefix: "hljs", // highlight.js 配置
 })
 
 // 请求AI完成
@@ -572,7 +576,8 @@ const railStyle = ({
         <!-- AI抽屉 -->
         <NDrawer v-model:show="data.openAiShow" :height="'100%'" :placement="'top'">
             <n-drawer-content :title="`ChatGPT-3.5 (Esc 收起)`"
-                :body-content-style="{ 'display': 'flex', 'justify-content': 'center', 'align-items': 'center' }" closable>
+                :body-content-style="{ 'display': 'flex', 'justify-content': 'center', 'align-items': 'center', 'padding': '14px' }"
+                closable>
                 <div class="openAi-box">
                     <div class="openAi-box-content">
 
@@ -978,7 +983,7 @@ span {
     line-height: 1.2rem;
     font-size: 0.95rem;
     color: white;
-    background-color: #000000 !important;
+    background-color: #2b2b2b !important;
     border-radius: 0.375rem;
     font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', 'monospace' !important;
     padding: 10px;
@@ -995,12 +1000,12 @@ span {
     overflow-x: auto;
 } */
 
-/* :deep() .item-right ol {
-    margin-left: 1.5rem;
-} */
+:deep() .item-right ul li {
+    margin-left: 2.1rem;
+}
 
-:deep() .item-right li {
-    margin-left: 2.5rem;
+:deep() .item-right ol li {
+    margin-left: 2.7rem;
 }
 
 .ai-highlightjs {
