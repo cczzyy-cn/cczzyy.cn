@@ -8,7 +8,7 @@ import '@wangeditor/editor/dist/css/style.css'
 import { AppType } from "/@/type/AppType"
 import { marked } from 'marked';
 import hljs from 'highlight.js'
-
+import ImageToText from "/@/components/ImageToText.vue"
 /**
  * 减CD方法
  * @param rawCD 原CD
@@ -129,7 +129,7 @@ const data = reactive<{
     AddLoading: false,
     PageData: {
         page: 1,
-        quantity: 5,
+        quantity: 8,
         total: 0,
         last_page: 1,
     },
@@ -654,7 +654,7 @@ const railStyle = ({
                                 </n-button>
                             </n-input-group>
                         </n-spin>
-                        <n-space style="margin-top: 5px;">
+                        <n-space style="margin-top: 5px;" :size="8">
                             <n-switch v-model:value="data.modeAi" :rail-style="railStyle" :round="false">
                                 <template #checked>
                                     问答模式
@@ -851,6 +851,7 @@ const railStyle = ({
                     </svg>
                     <span>ChatGPT</span>
                 </n-button>
+                <ImageToText></ImageToText>
             </NSpace>
             <div class="text f" style="flex-direction:row-reverse;margin-bottom: 5px;">
                 <span>total:{{ data.ArticleArray.length }}/{{ data.PageData.total }}</span>

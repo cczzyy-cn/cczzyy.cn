@@ -6,6 +6,7 @@ import { IEditorConfig } from '@wangeditor/editor'
 import { Editor } from '@wangeditor/editor-for-vue'
 import '@wangeditor/editor/dist/css/style.css'
 import { AppType } from "/@/type/AppType"
+import HistoryBack from "/@/components/HistoryBack.vue"
 
 const app = inject('app') as AppType
 const router = useRouter();
@@ -136,7 +137,9 @@ const Go = (name: string, query: LocationQueryRaw | undefined) => {
         query: query
     })
 }
-
+const back = () => {
+    window.history.back();
+}
 </script>
 
 <template>
@@ -147,9 +150,13 @@ const Go = (name: string, query: LocationQueryRaw | undefined) => {
                     <a href="/">cczzyy.cn</a>
                 </div>
             </div>
-            <div class="top_title">
+            <!-- 错误信息 -->
+            <div class="top_title" style="color: rgb(233, 41, 41);">
                 {{ data.msg }}
             </div>
+            <HistoryBack></HistoryBack>
+
+
             <NSpin :show="data.Loading" style="width: 100%;min-height: 600px;">
                 <NCollapseTransition v-for="(item, index) in data.ArticleArray" :show="item.show">
                     <div class="item_box">
@@ -197,7 +204,7 @@ const Go = (name: string, query: LocationQueryRaw | undefined) => {
 
 #top_box {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .top_title {

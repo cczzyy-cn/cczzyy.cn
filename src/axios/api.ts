@@ -16,6 +16,7 @@ const api: ApiType = {
     postArticle: "/blog/postArticle",
     deleteArticle: "/blog/deleteArticle",
     uploadImage: "/blog/uploadImage",
+    imageToText: "/index/imageToText",// /index/imageToText
 }
 
 export { api } 
