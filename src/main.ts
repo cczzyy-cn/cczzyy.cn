@@ -14,10 +14,8 @@ import {
     NIcon
 } from 'naive-ui'
 
-import HistoryBack from "/@/components/HistoryBack.vue"
-
 const naive = create({
-    components: [NButton, NIcon, HistoryBack]
+    components: [NButton, NIcon]
 })
 const app = createApp(App)
 app.use(router)

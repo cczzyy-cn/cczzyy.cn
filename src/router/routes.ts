@@ -6,6 +6,7 @@ const Publish = () => import('/@/page/publish/index.vue')
 const Article = () => import('/@/page/article/index.vue')
 const Update = () => import('/@/page/update/index.vue')
 const Live = () => import('/@/page/live/index.vue')
+const Tools = () => import('/@/page/tools/index.vue')
 
 const NotFound = () => import('/@/page/NotFound.vue')
 
@@ -54,6 +55,15 @@ const routes = [
             title: "直播",
         },
         component: Live
+    },
+    {
+        path: '/tools',
+        name: "Tools",
+        meta: {
+            keepAlive: false,
+            title: "工具",
+        },
+        component: Tools
     },
     {
         path: '/:path(.*)',

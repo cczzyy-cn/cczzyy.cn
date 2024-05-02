@@ -8,7 +8,7 @@ import '@wangeditor/editor/dist/css/style.css'
 import { AppType } from "/@/type/AppType"
 import { marked } from 'marked';
 import hljs from 'highlight.js'
-import ImageToText from "/@/components/ImageToText.vue"
+
 /**
  * 减CD方法
  * @param rawCD 原CD
@@ -851,7 +851,7 @@ const railStyle = ({
                     </svg>
                     <span>ChatGPT</span>
                 </n-button>
-                <ImageToText></ImageToText>
+                <n-button color="#D8AE7E" type="success" @click="Go('Tools', {})">工具</n-button>
             </NSpace>
             <div class="text f" style="flex-direction:row-reverse;margin-bottom: 5px;">
                 <span>total:{{ data.ArticleArray.length }}/{{ data.PageData.total }}</span>
