@@ -106,6 +106,9 @@ const handleCSV = () => {
         if (data.csvData[index]['高度'] < data.valueH && data.csvData[index]['宽度'] < data.valueW) {
             data.csvData[index]['造型名称'] = "平板PETA"
         }
+        if (data.csvData[index]['高度'] < data.valueW && data.csvData[index]['宽度'] < data.valueH) {
+            data.csvData[index]['造型名称'] = "平板PETA"
+        }
         if (data.valueS) {
             if (data.csvData[index]['高度'] < 50) {
                 data.csvData[index]['备注'] = `${data.csvData[index]['备注']}[切到${data.csvData[index]['高度']}高]`
@@ -132,8 +135,11 @@ if (stringData) {
 
 // 生成新CSV文件
 const generateNewCSV = () => {
+    if (data.csvData.length == 0) {
+        app.msg.warning('选择文件数据为空!')
+        return
+    }
     handleCSV()
-
     // 将原始数据逆序，并保存到newData中
     data.newData = data.csvData.slice().reverse();
     console.log(data.csvData);
@@ -187,18 +193,18 @@ const generateNewCSV = () => {
                                 style="display: none;">
                             <n-data-table :columns="data.columns" :data="data.fileList" :bordered="true" />
                         </n-form-item>
-                        <n-form-item label="高或宽低于该值时修改为PETA：" path="input">
+                        <n-form-item label="高或宽低于该值时修改为[平板PETA]：" path="input">
                             <n-input-group style="margin-left: 0px;">
                                 <n-input-number v-model:value="data.value" clearable />
                             </n-input-group>
                         </n-form-item>
-                        <n-form-item label="高和宽都低于以下值时修改为PETA：" path="input">
+                        <n-form-item label="高和宽都低于以下值时修改为[平板PETA]：" path="input">
                             <n-input-group style="margin-left: 0px;">
-                                <n-button>高度</n-button>
+                                <n-button>高/宽</n-button>
                                 <n-input-number v-model:value="data.valueH" clearable />
                             </n-input-group>
                             <n-input-group style="margin-left: 10px;">
-                                <n-button>宽度</n-button>
+                                <n-button>高/宽</n-button>
                                 <n-input-number v-model:value="data.valueW" clearable />
                             </n-input-group>
                         </n-form-item>

@@ -9,7 +9,7 @@ import HandleCSV from "/@/components/HandleCSV.vue"
 <template>
     <div id="tools">
         <HandleCSV></HandleCSV>
-        <!-- <ImageToText></ImageToText> -->
+        <ImageToText></ImageToText>
     </div>
 </template>
     

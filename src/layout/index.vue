@@ -195,8 +195,7 @@ const email = `© Developed by < cczzyy.cn@gmail.com >`;
                 </template>
                 <div class="drawer_img" @click="app.state.img.active = !app.state.img.active">
                     <div class="img_box">
-                        <img v-show="app.state.img.active" :src="app.state.img.imgSrc"
-                            @wheel.prevent="app.state.img.wheel"
+                        <img v-show="app.state.img.active" :src="app.state.img.imgSrc" @wheel.prevent="app.state.img.wheel"
                             :style="{ width: app.state.img.imgWidth + '%', height: 'auto' }" />
                     </div>
                 </div>
@@ -219,7 +218,10 @@ const email = `© Developed by < cczzyy.cn@gmail.com >`;
                     <img src="/public/beian.png" width="18" style="margin-right: 5px;" />
                     <div>{{ beian }}</div>
                 </a>
-                <div class="text" style="margin-left: 5px;margin-right: 5px;">{{ beian2 }}</div>
+                <a target="_blank" href="https://beian.miit.gov.cn/" class="beian_a">
+                    <div style="margin-left: 5px;margin-right: 5px;">{{ beian2 }}</div>
+                </a>
+
                 <div class="text">{{ email }}</div>
             </div>
         </div>
@@ -227,7 +229,6 @@ const email = `© Developed by < cczzyy.cn@gmail.com >`;
 </template>
     
 <style>
-
 .f {
     display: flex;
 }
